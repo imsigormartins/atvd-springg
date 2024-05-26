@@ -24,8 +24,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
-                .anyRequest().authenticated()
+            .anyRequest().authenticated()
+
             )
             .formLogin(withDefaults())
             .httpBasic(withDefaults());
@@ -35,8 +37,8 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails user = User.builder()
-                .username("usuario")
-                .password(passwordEncoder.encode("senha"))
+                .username("user")
+                .password(passwordEncoder.encode("abc1010"))
                 .roles("USER")
                 .build();
     
