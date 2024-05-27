@@ -7,7 +7,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,16 +24,4 @@ public class PontoColeta {
 
     @ManyToOne
     private Rota rota;
-
-    @OneToMany(mappedBy = "pontoColeta")
-    private List<Agendamento> agendamentos;
-
-    // toString, equals, hashCode
-
-    @Override
-    public String toString() {
-        return "PontoColeta [endereco=" + endereco + ", id=" + id + ", observacao=" + observacao + ", quantidade="
-                + quantidade + ", tipoResiduo=" + tipoResiduo + "]";
-    }
-
 }

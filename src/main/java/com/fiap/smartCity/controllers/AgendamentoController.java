@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,12 +26,12 @@ public class AgendamentoController {
     }
 
     @PostMapping
-    public Agendamento saveAgendamento(Agendamento agendamento) {
+    public Agendamento saveAgendamento(@RequestBody Agendamento agendamento) {
         return agendamentoService.saveAgendamento(agendamento);
     }
 
     @PutMapping("/{id}")
-    public Agendamento editAgendamento(Agendamento agendamento, Long id) {
+    public Agendamento editAgendamento(@RequestBody Agendamento agendamento, Long id) {
         return agendamentoService.editAgendamento(agendamento, id);
     }
 

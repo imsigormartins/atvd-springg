@@ -27,21 +27,26 @@ public class RotaService {
     }
 
     public Rota saveRota(Rota rota) {
-
-        List<PontoColeta> pontosColeta = new ArrayList<>();
-
-        for (PontoColeta pontoColeta : rota.getPontosColeta()) {
-            PontoColeta novoPontoColeta = new PontoColeta();
-            novoPontoColeta.setEndereco(pontoColeta.getEndereco());
-            novoPontoColeta.setQuantidade(pontoColeta.getQuantidade());
-            novoPontoColeta.setTipoResiduo(pontoColeta.getTipoResiduo());
-            novoPontoColeta.setObservacao(pontoColeta.getObservacao());
-            novoPontoColeta.setRota(rota);
-            pontosColeta.add(novoPontoColeta);
+        Caminhao caminhao = caminhaoRepository.findById(rota.getCaminhao().getId()).orElse(null);
+        if (caminhao == null) {
+            throw new IllegalArgumentException("Caminhão com id " + rota.getCaminhao().getId() + " não encontrado");
         }
 
-        // associar a lista de pontos de coleta à rota
-        rota.setPontosColeta(pontosColeta);
+        rota.setCaminhao(caminhao);
+
+        // List<PontoColeta> pontosColeta = new ArrayList<>();
+
+        // for (PontoColeta pontoColeta : rota.getPontosColeta()) {
+        //     PontoColeta novoPontoColeta = new PontoColeta();
+        //     novoPontoColeta.setEndereco(pontoColeta.getEndereco());
+        //     novoPontoColeta.setQuantidade(pontoColeta.getQuantidade());
+        //     novoPontoColeta.setTipoResiduo(pontoColeta.getTipoResiduo());
+        //     novoPontoColeta.setObservacao(pontoColeta.getObservacao());
+        //     novoPontoColeta.setRota(rota);
+        //     pontosColeta.add(novoPontoColeta);
+        // }
+
+        // rota.setPontosColeta(pontosColeta);
 
         return rotaRepository.save(rota);
     }
@@ -58,20 +63,20 @@ public class RotaService {
         rotaExistente.setPontoPartida(rota.getPontoPartida());
 
         // instanciar a lista de pontos de coleta
-        List<PontoColeta> pontosColeta = new ArrayList<>();
+        // List<PontoColeta> pontosColeta = new ArrayList<>();
 
-        for (PontoColeta pontoColeta : rota.getPontosColeta()) {
-            PontoColeta novoPontoColeta = new PontoColeta();
-            novoPontoColeta.setEndereco(pontoColeta.getEndereco());
-            novoPontoColeta.setQuantidade(pontoColeta.getQuantidade());
-            novoPontoColeta.setTipoResiduo(pontoColeta.getTipoResiduo());
-            novoPontoColeta.setObservacao(pontoColeta.getObservacao());
-            novoPontoColeta.setRota(rotaExistente);
-            pontosColeta.add(novoPontoColeta);
-        }
+        // for (PontoColeta pontoColeta : rota.getPontosColeta()) {
+        //     PontoColeta novoPontoColeta = new PontoColeta();
+        //     novoPontoColeta.setEndereco(pontoColeta.getEndereco());
+        //     novoPontoColeta.setQuantidade(pontoColeta.getQuantidade());
+        //     novoPontoColeta.setTipoResiduo(pontoColeta.getTipoResiduo());
+        //     novoPontoColeta.setObservacao(pontoColeta.getObservacao());
+        //     novoPontoColeta.setRota(rotaExistente);
+        //     pontosColeta.add(novoPontoColeta);
+        // }
 
-        // associar a lista de pontos de coleta à rota
-        rotaExistente.setPontosColeta(pontosColeta);
+        // // associar a lista de pontos de coleta à rota
+        // rotaExistente.setPontosColeta(pontosColeta);
 
         return rotaRepository.save(rotaExistente);
     }

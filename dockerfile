@@ -1,11 +1,15 @@
-# Use a imagem oficial do MySQL
-FROM mysql:latest
+# Use a imagem oficial do Java para executar um aplicativo Spring Boot
+FROM openjdk:8-jdk-alpine
 
-# Define as variáveis de ambiente para a configuração do MySQL
-ENV MYSQL_DATABASE=mydatabase
-ENV MYSQL_USER=root
-ENV MYSQL_PASSWORD=abc123
-ENV MYSQL_ROOT_PASSWORD=abc123
+ARG APP_DIR=/app
 
-# Expõe a porta 3306
-EXPOSE 3306
+RUN mkdir -p $APP_DIR
+
+WORKDIR $APP_DIR
+
+COPY ./target/smartCity-0.0.1-SNAPSHOT.jar $APP_DIR
+
+EXPOSE 8080
+
+# Comando para iniciar o aplicativo
+CMD ["java", "-jar", "smartCity-0.0.1-SNAPSHOT.jar"]
