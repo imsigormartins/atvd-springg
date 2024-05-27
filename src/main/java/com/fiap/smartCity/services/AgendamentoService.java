@@ -33,19 +33,21 @@ public class AgendamentoService {
         if (agendamentoExistente == null) {
             throw new IllegalArgumentException("Agendamento com id " + id + " não encontrado");
         }
-
+    
         agendamentoExistente.setData(agendamento.getData());
         agendamentoExistente.setHora(agendamento.getHora());
         agendamentoExistente.setEndereco(agendamento.getEndereco());
         agendamentoExistente.setTipoResiduo(agendamento.getTipoResiduo());
         agendamentoExistente.setQuantidade(agendamento.getQuantidade());
         agendamentoExistente.setObservacao(agendamento.getObservacao());
-
+    
         return agendamentoRepository.save(agendamentoExistente);
     }
 
     public void deleteAgendamento(Long id) {
+        if (!agendamentoRepository.existsById(id)) {
+            throw new IllegalArgumentException("Agendamento com id " + id + " não encontrado");
+        }
         agendamentoRepository.deleteById(id);
     }
-    
 }

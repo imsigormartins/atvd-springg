@@ -25,12 +25,13 @@ public class Caminhao {
     private String ano;
     private String capacidade;
 
-    // @OneToMany(mappedBy = "caminhao", fetch = FetchType.LAZY)
-    // private List<Rota> rota;
+    @OneToMany(mappedBy = "caminhao", fetch = FetchType.LAZY)
+    private List<Rota> rota;
 
     public Caminhao() {
-
     }
+
+    // Adicione métodos setter para todos os campos, se ainda não os tiver
 
     public Caminhao(String cor, String placa, String modelo, String marca, String ano, String capacidade) {
         this.cor = cor;

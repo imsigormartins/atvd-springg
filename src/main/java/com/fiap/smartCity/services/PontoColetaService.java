@@ -38,11 +38,20 @@ public class PontoColetaService {
 
     public PontoColeta editPontoColeta(PontoColeta pontoColeta, Long id) {
         PontoColeta pontoColetaExistente = pontoColetaRepository.findById(id).orElse(null);
-
+        if (pontoColetaExistente == null) {
+            throw new IllegalArgumentException("PontoColeta com id " + id + " não encontrado");
+        }
+        pontoColetaExistente.setEndereco(pontoColeta.getEndereco());
+        pontoColetaExistente.setQuantidade(pontoColeta.getQuantidade());
+        pontoColetaExistente.setTipoResiduo(pontoColeta.getTipoResiduo());
+        pontoColetaExistente.setObservacao(pontoColeta.getObservacao());
         return pontoColetaRepository.save(pontoColetaExistente);
     }
 
     public void deletePontoColeta(Long id) {
+        if (!pontoColetaRepository.existsById(id)) {
+            throw new IllegalArgumentException("PontoColeta com id " + id + " não encontrado");
+        }
         pontoColetaRepository.deleteById(id);
     }
 

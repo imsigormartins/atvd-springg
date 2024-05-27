@@ -28,14 +28,16 @@ public class NotificacaoService {
         if (notificacaoExistente == null) {
             throw new IllegalArgumentException("Notificacao com id " + id + " não encontrado");
         }
-
+    
         notificacaoExistente.setMensagem(notificacao.getMensagem());
-
+    
         return notificacaoRepository.save(notificacaoExistente);
     }
 
     public void deleteNotificacao(Long id) {
+        if (!notificacaoRepository.existsById(id)) {
+            throw new IllegalArgumentException("Notificacao com id " + id + " não encontrado");
+        }
         notificacaoRepository.deleteById(id);
     }
-    
 }

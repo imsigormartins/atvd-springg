@@ -3,12 +3,14 @@ package com.fiap.smartCity.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fiap.smartCity.models.Caminhao;
 import com.fiap.smartCity.models.PontoColeta;
 import com.fiap.smartCity.models.Rota;
 import com.fiap.smartCity.repositories.CaminhaoRepository;
+import com.fiap.smartCity.repositories.PontoColetaRepository;
 import com.fiap.smartCity.repositories.RotaRepository;
 
 @Service
@@ -16,6 +18,8 @@ public class RotaService {
 
     private final RotaRepository rotaRepository;
     private final CaminhaoRepository caminhaoRepository;
+    @Autowired
+    private PontoColetaRepository pontoColetaRepository;
 
     public RotaService(RotaRepository rotaRepository, CaminhaoRepository caminhaoRepository) {
         this.rotaRepository = rotaRepository;
@@ -27,31 +31,29 @@ public class RotaService {
     }
 
     public Rota saveRota(Rota rota) {
-        Caminhao caminhao = caminhaoRepository.findById(rota.getCaminhao().getId()).orElse(null);
-        if (caminhao == null) {
-            throw new IllegalArgumentException("Caminhão com id " + rota.getCaminhao().getId() + " não encontrado");
+        List<PontoColeta> pontosColeta = new ArrayList<>();
+    
+        for (PontoColeta pontoColeta : rota.getPontosColeta()) {
+            // Buscar o ponto de coleta do banco de dados
+            PontoColeta pontoColetaExistente = pontoColetaRepository.findById(pontoColeta.getId())
+                .orElseThrow();
+    
+            // Definir a rota para o ponto de coleta existente
+            pontoColetaExistente.setRota(rota);
+    
+            pontosColeta.add(pontoColetaExistente);
         }
-
-        rota.setCaminhao(caminhao);
-
-        // List<PontoColeta> pontosColeta = new ArrayList<>();
-
-        // for (PontoColeta pontoColeta : rota.getPontosColeta()) {
-        //     PontoColeta novoPontoColeta = new PontoColeta();
-        //     novoPontoColeta.setEndereco(pontoColeta.getEndereco());
-        //     novoPontoColeta.setQuantidade(pontoColeta.getQuantidade());
-        //     novoPontoColeta.setTipoResiduo(pontoColeta.getTipoResiduo());
-        //     novoPontoColeta.setObservacao(pontoColeta.getObservacao());
-        //     novoPontoColeta.setRota(rota);
-        //     pontosColeta.add(novoPontoColeta);
-        // }
-
-        // rota.setPontosColeta(pontosColeta);
-
+    
+        // Associar a lista de pontos de coleta à rota
+        rota.setPontosColeta(pontosColeta);
+    
         return rotaRepository.save(rota);
     }
 
     public void deleteRota(Long id) {
+        if (!rotaRepository.existsById(id)) {
+            throw new IllegalArgumentException("Rota com id " + id + " não encontrada");
+        }
         rotaRepository.deleteById(id);
     }
 
@@ -60,24 +62,9 @@ public class RotaService {
         if (rotaExistente == null) {
             throw new IllegalArgumentException("Rota com id " + id + " não encontrada");
         }
+    
         rotaExistente.setPontoPartida(rota.getPontoPartida());
-
-        // instanciar a lista de pontos de coleta
-        // List<PontoColeta> pontosColeta = new ArrayList<>();
-
-        // for (PontoColeta pontoColeta : rota.getPontosColeta()) {
-        //     PontoColeta novoPontoColeta = new PontoColeta();
-        //     novoPontoColeta.setEndereco(pontoColeta.getEndereco());
-        //     novoPontoColeta.setQuantidade(pontoColeta.getQuantidade());
-        //     novoPontoColeta.setTipoResiduo(pontoColeta.getTipoResiduo());
-        //     novoPontoColeta.setObservacao(pontoColeta.getObservacao());
-        //     novoPontoColeta.setRota(rotaExistente);
-        //     pontosColeta.add(novoPontoColeta);
-        // }
-
-        // // associar a lista de pontos de coleta à rota
-        // rotaExistente.setPontosColeta(pontosColeta);
-
+    
         return rotaRepository.save(rotaExistente);
     }
 

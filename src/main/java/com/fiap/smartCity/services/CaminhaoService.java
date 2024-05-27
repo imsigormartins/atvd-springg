@@ -26,23 +26,27 @@ public class CaminhaoService {
         return caminhaoRepository.save(caminhao);
     }
 
-	public void deleteCaminhao(Long id) {
+    public void deleteCaminhao(Long id) {
+        if (!caminhaoRepository.existsById(id)) {
+            throw new IllegalArgumentException("Caminhao com id " + id + " não encontrado");
+        }
         caminhaoRepository.deleteById(id);
-	}
+    }
 
     public Caminhao editCaminhao(Caminhao caminhao, Long id) {
-        if (!caminhaoRepository.existsById(id)) {
-            throw new RuntimeException("Caminhao não encontrado");
-        } else {
-            Caminhao caminhaoToUpdate = caminhaoRepository.findById(id).get();
-            caminhaoToUpdate.setCor(caminhao.getCor());
-            caminhaoToUpdate.setPlaca(caminhao.getPlaca());
-            caminhaoToUpdate.setMarca(caminhao.getMarca());
-            caminhaoToUpdate.setModelo(caminhao.getModelo());
-            caminhaoToUpdate.setAno(caminhao.getAno());
-            caminhaoToUpdate.setCapacidade(caminhao.getCapacidade());
-            return caminhaoRepository.save(caminhaoToUpdate);
+        Caminhao caminhaoExistente = caminhaoRepository.findById(id).orElse(null);
+        if (caminhaoExistente == null) {
+            throw new IllegalArgumentException("Caminhao com id " + id + " não encontrado");
         }
+    
+        caminhaoExistente.setCor(caminhao.getCor());
+        caminhaoExistente.setPlaca(caminhao.getPlaca());
+        caminhaoExistente.setMarca(caminhao.getMarca());
+        caminhaoExistente.setModelo(caminhao.getModelo());
+        caminhaoExistente.setAno(caminhao.getAno());
+        caminhaoExistente.setCapacidade(caminhao.getCapacidade());
+    
+        return caminhaoRepository.save(caminhaoExistente);
     }
     
 }
