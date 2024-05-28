@@ -1,15 +1,14 @@
-# Use a imagem oficial do Java para executar um aplicativo Spring Boot
+# Use a base image with Java
 FROM openjdk:8-jdk-alpine
 
-ARG APP_DIR=/app
-
-RUN mkdir -p $APP_DIR
-
-WORKDIR $APP_DIR
-
-COPY ./target/smartCity-0.0.1-SNAPSHOT.jar $APP_DIR
-
+# Make port 8080 available to the world outside this container
 EXPOSE 8080
 
-# Comando para iniciar o aplicativo
-CMD ["java", "-jar", "smartCity-0.0.1-SNAPSHOT.jar"]
+# The application's jar file
+ARG JAR_FILE=target/my-application.jar
+
+# Add the application's jar to the container
+ADD ${JAR_FILE} app.jar
+
+# Run the jar file 
+ENTRYPOINT ["java","-jar","/app.jar"]
