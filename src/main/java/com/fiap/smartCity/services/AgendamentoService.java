@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.fiap.smartCity.DTOs.AgendamentoDTO;
 import com.fiap.smartCity.models.Agendamento;
 import com.fiap.smartCity.models.PontoColeta;
 import com.fiap.smartCity.repositories.AgendamentoRepository;
@@ -49,5 +50,29 @@ public class AgendamentoService {
             throw new IllegalArgumentException("Agendamento com id " + id + " não encontrado");
         }
         agendamentoRepository.deleteById(id);
+    }
+
+    public Agendamento convertDtoToEntity(AgendamentoDTO agendamentoDTO) {
+        Agendamento agendamento = new Agendamento();
+        agendamento.setData(agendamentoDTO.getData());
+        agendamento.setHora(agendamentoDTO.getHora());
+        agendamento.setEndereco(agendamentoDTO.getEndereco());
+        agendamento.setTipoResiduo(agendamentoDTO.getTipoResiduo());
+        agendamento.setQuantidade(agendamentoDTO.getQuantidade());
+        agendamento.setObservacao(agendamentoDTO.getObservacao());
+        // set other fields as needed
+        return agendamento;
+    }
+
+    public AgendamentoDTO convertEntityToDto(Agendamento savedAgendamento) {
+        AgendamentoDTO agendamentoDTO = new AgendamentoDTO();
+        agendamentoDTO.setData(savedAgendamento.getData());
+        agendamentoDTO.setHora(savedAgendamento.getHora());
+        agendamentoDTO.setEndereco(savedAgendamento.getEndereco());
+        agendamentoDTO.setTipoResiduo(savedAgendamento.getTipoResiduo());
+        agendamentoDTO.setQuantidade(savedAgendamento.getQuantidade());
+        agendamentoDTO.setObservacao(savedAgendamento.getObservacao());
+        // set other fields as needed
+        return agendamentoDTO;
     }
 }

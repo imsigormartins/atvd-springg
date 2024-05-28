@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.fiap.smartCity.DTOs.NotificacaoDTO;
 import com.fiap.smartCity.models.Notificacao;
 import com.fiap.smartCity.repositories.NotificacaoRepository;
 
@@ -39,5 +40,19 @@ public class NotificacaoService {
             throw new IllegalArgumentException("Notificacao com id " + id + " não encontrado");
         }
         notificacaoRepository.deleteById(id);
+    }
+
+    public Notificacao convertDtoToEntity(NotificacaoDTO notificacaoDTO) {
+        Notificacao notificacao = new Notificacao();
+        notificacao.setId(notificacaoDTO.getId());
+        notificacao.setMensagem(notificacaoDTO.getMensagem());
+        return notificacao;
+    }
+
+    public NotificacaoDTO convertEntityToDto(Notificacao notificacaoSaved) {
+        NotificacaoDTO notificacaoDTO = new NotificacaoDTO();
+        notificacaoDTO.setId(notificacaoSaved.getId());
+        notificacaoDTO.setMensagem(notificacaoSaved.getMensagem());
+        return notificacaoDTO;
     }
 }

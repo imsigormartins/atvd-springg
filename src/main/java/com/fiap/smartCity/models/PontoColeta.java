@@ -34,6 +34,4 @@ public class PontoColeta {
     @JsonManagedReference
     private List<Agendamento> agendamentos;
 
-    // toString, equals, hashCode
-    // ...
 }

@@ -1,6 +1,7 @@
 package com.fiap.smartCity.controllers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,9 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fiap.smartCity.DTOs.RotaDTO;
+import com.fiap.smartCity.models.PontoColeta;
 import com.fiap.smartCity.models.Rota;
 import com.fiap.smartCity.services.RotaService;
-
 @RestController
 @RequestMapping("/api/rotas")
 public class RotaController {
@@ -22,22 +24,30 @@ public class RotaController {
     private RotaService rotaService;
 
     @GetMapping
-    public List<Rota> getAllRotas() {
-        return rotaService.getAllRotas();
+    public List<RotaDTO> getAllRotas() {
+        return rotaService.getAllRotas().stream()
+            .map(rotaService::convertEntityToDto)
+            .collect(Collectors.toList());
     }
 
     @PostMapping
-    public Rota createRota(@RequestBody Rota rota) {
-        return rotaService.saveRota(rota);
+    public RotaDTO createRota(@RequestBody RotaDTO rotaDTO) {
+        Rota rota = rotaService.saveRota(rotaService.convertDtoToEntity(rotaDTO));
+        Rota rotaSaved = rotaService.saveRota(rota);
+        return rotaService.convertEntityToDto(rotaSaved);
     }
 
-    @PutMapping({"/{id}"})
-    public Rota updateRota(@RequestBody Rota rota, @PathVariable Long id) {
-        return rotaService.editRota(rota, id);
+    @PutMapping("/{id}")
+    public RotaDTO updateRota(@RequestBody RotaDTO rotaDTO, @PathVariable Long id) {
+        Rota rota = rotaService.editRota(rotaService.convertDtoToEntity(rotaDTO), id);
+        Rota rotaEdited = rotaService.editRota(rota, id);
+        return rotaService.convertEntityToDto(rotaEdited);
     }
 
-    @DeleteMapping({"/{id}"})
+    @DeleteMapping("/{id}")
     public void deleteRota(@PathVariable Long id) {
         rotaService.deleteRota(id);
     }
+
+
 }

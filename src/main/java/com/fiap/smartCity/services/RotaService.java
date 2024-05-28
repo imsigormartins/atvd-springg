@@ -2,10 +2,12 @@ package com.fiap.smartCity.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fiap.smartCity.DTOs.RotaDTO;
 import com.fiap.smartCity.models.Caminhao;
 import com.fiap.smartCity.models.PontoColeta;
 import com.fiap.smartCity.models.Rota;
@@ -66,6 +68,31 @@ public class RotaService {
         rotaExistente.setPontoPartida(rota.getPontoPartida());
     
         return rotaRepository.save(rotaExistente);
+    }
+
+    public Rota convertDtoToEntity(RotaDTO rotaDTO) {
+        Rota rota = new Rota();
+        rota.setId(rotaDTO.getId());
+        rota.setPontoPartida(rotaDTO.getPontoPartida());
+        // set PontosColeta and Caminhao based on ids from DTO
+        return rota;
+    }
+
+    public RotaDTO convertEntityToDto(Rota rotaEdited) {
+        RotaDTO rotaDTO = new RotaDTO();
+        rotaDTO.setId(rotaEdited.getId());
+        rotaDTO.setPontoPartida(rotaEdited.getPontoPartida());
+        rotaDTO.setPontosColetaIds(rotaEdited.getPontosColeta().stream().map(PontoColeta::getId).collect(Collectors.toList()));
+
+        //verficar se é null
+
+        if (rotaEdited.getCaminhao() != null) {
+            rotaDTO.setCaminhaoId(rotaEdited.getCaminhao().getId());
+        } else {
+            rotaDTO.setCaminhaoId(null);
+        }
+
+        return rotaDTO;
     }
 
 

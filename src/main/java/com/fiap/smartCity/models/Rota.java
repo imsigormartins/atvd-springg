@@ -27,7 +27,7 @@ public class Rota {
 
     private String pontoPartida;
 
-    @OneToMany(mappedBy = "rota", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "rota", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<PontoColeta> pontosColeta = new ArrayList<>();
 

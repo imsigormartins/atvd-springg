@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fiap.smartCity.DTOs.CaminhaoDTO;
 import com.fiap.smartCity.models.Caminhao;
 import com.fiap.smartCity.repositories.CaminhaoRepository;
 
@@ -47,6 +48,30 @@ public class CaminhaoService {
         caminhaoExistente.setCapacidade(caminhao.getCapacidade());
     
         return caminhaoRepository.save(caminhaoExistente);
+    }
+
+    public Caminhao convertDtoToEntity(CaminhaoDTO caminhaoDTO) {
+        Caminhao caminhao = new Caminhao();
+        caminhao.setId(caminhaoDTO.getId());
+        caminhao.setCor(caminhaoDTO.getCor());
+        caminhao.setPlaca(caminhaoDTO.getPlaca());
+        caminhao.setModelo(caminhaoDTO.getModelo());
+        caminhao.setMarca(caminhaoDTO.getMarca());
+        caminhao.setAno(caminhaoDTO.getAno());
+        caminhao.setCapacidade(caminhaoDTO.getCapacidade());
+        return caminhao;
+    }
+
+    public CaminhaoDTO convertEntityToDto(Caminhao caminhao) {
+        CaminhaoDTO caminhaoDTO = new CaminhaoDTO();
+        caminhaoDTO.setId(caminhao.getId());
+        caminhaoDTO.setCor(caminhao.getCor());
+        caminhaoDTO.setPlaca(caminhao.getPlaca());
+        caminhaoDTO.setModelo(caminhao.getModelo());
+        caminhaoDTO.setMarca(caminhao.getMarca());
+        caminhaoDTO.setAno(caminhao.getAno());
+        caminhaoDTO.setCapacidade(caminhao.getCapacidade());
+        return caminhaoDTO;
     }
     
 }
